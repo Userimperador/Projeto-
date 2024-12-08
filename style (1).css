@@ -1,0 +1,81 @@
+/* Estilos Globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f9f9;
+}
+
+/* Cabeçalho */
+header {
+    background-color: #f4f4f4;
+    text-align: center;
+    padding: 30px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Navegação */
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    background-color: #007BFF;
+    padding: 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* Seção Contato */
+section#contato {
+    padding: 50px 20px;
+    background: #f9f9f9;
+    text-align: center;
+}
+
+section#contato form {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: left;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+section#contato form input,
+section#contato form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+section#contato form button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+}
