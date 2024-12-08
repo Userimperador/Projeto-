@@ -26,6 +26,12 @@ header h1 {
     margin-bottom: 10px;
 }
 
+header .subtitle {
+    font-size: 1.2em;
+    color: #555;
+    font-style: italic;
+}
+
 /* Navegação */
 nav ul {
     list-style: none;
@@ -35,6 +41,10 @@ nav ul {
     padding: 10px;
 }
 
+nav ul li {
+    margin: 0 15px;
+}
+
 nav ul li a {
     color: white;
     text-decoration: none;
@@ -42,11 +52,135 @@ nav ul li a {
     font-size: 1.1em;
 }
 
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Seção Home */
+section#home {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #f9f9f9;
+}
+
+.highlight-box {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.highlight-box h2 {
+    font-size: 2em;
+    color: #007BFF;
+}
+
+.highlight-box p {
+    font-size: 1em;
+    color: #555;
+    margin: 15px 0;
+}
+
+.highlight-box .cta-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.highlight-box .cta-button:hover {
+    background-color: #0056b3;
+}
+
+/* Seção Sobre */
+section#sobre {
+    padding: 50px 20px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.sobre-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: justify;
+    line-height: 1.8;
+}
+
+.sobre-wrapper h2 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.sobre-wrapper p {
+    margin-bottom: 15px;
+    font-size: 1em;
+    color: #555;
+}
+
+.sobre-wrapper p strong {
+    color: #007BFF;
+}
+
+/* Seção Serviços */
+section#servicos {
+    padding: 50px 20px;
+    text-align: center;
+    background: #f4f4f4;
+}
+
+section#servicos h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+section#servicos ul {
+    list-style: none;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0;
+    text-align: left;
+}
+
+section#servicos ul li {
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: #555;
+    padding-left: 20px;
+    position: relative;
+}
+
+section#servicos ul li::before {
+    content: '•';
+    color: #007BFF;
+    font-size: 1.5em;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
 /* Seção Contato */
 section#contato {
     padding: 50px 20px;
     background: #f9f9f9;
     text-align: center;
+}
+
+section#contato h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
 }
 
 section#contato form {
@@ -57,6 +191,13 @@ section#contato form {
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+section#contato form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
 }
 
 section#contato form input,
@@ -78,4 +219,40 @@ section#contato form button {
     border-radius: 5px;
     font-size: 1em;
     cursor: pointer;
+}
+
+section#contato form button:hover {
+    background-color: #0056b3;
+}
+
+/* Rodapé */
+footer {
+    text-align: center;
+    background: #f4f4f4;
+    padding: 10px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+    }
+
+    .highlight-box {
+        padding: 20px;
+    }
+
+    .sobre-wrapper {
+        padding: 20px;
+    }
+
+    section#contato form {
+        padding: 20px;
+    }
+
+    footer {
+        font-size: 0.8em;
+    }
 }
