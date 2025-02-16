@@ -1,0 +1,130 @@
+-- Configurações iniciais
+love.window.setTitle("Shooter Espacial")
+love.graphics.setDefaultFilter("nearest", "nearest")
+
+-- Variáveis globais
+local nave = {}
+local tiros = {}
+local asteroides = {}
+local explosoes = {}
+local tempo_tiro = 0
+local pontuacao = 0
+
+-- Configurações da nave
+function iniciarNave()
+    nave.x = love.graphics.getWidth() / 2
+    nave.y = love.graphics.getHeight() - 50
+    nave.velocidade = 300
+    nave.largura = 50
+    nave.altura = 50
+end
+
+-- Função para criar um novo tiro
+function atirar()
+    if tempo_tiro <= 0 then
+        table.insert(tiros, { x = nave.x + 20, y = nave.y, velocidade = 500 })
+        tempo_tiro = 0.3 -- Delay entre tiros
+    end
+end
+
+-- Função para criar asteroides aleatórios
+function criarAsteroide()
+    local novoAsteroide = {
+        x = math.random(0, love.graphics.getWidth() - 50),
+        y = -50,
+        velocidade = math.random(100, 200),
+        largura = 50,
+        altura = 50
+    }
+    table.insert(asteroides, novoAsteroide)
+end
+
+-- Atualiza o jogo
+function love.update(dt)
+    -- Movimento da nave
+    if love.keyboard.isDown("left") and nave.x > 0 then
+        nave.x = nave.x - nave.velocidade * dt
+    elseif love.keyboard.isDown("right") and nave.x < love.graphics.getWidth() - nave.largura then
+        nave.x = nave.x + nave.velocidade * dt
+    end
+
+    -- Atualiza tempo de tiro
+    if tempo_tiro > 0 then
+        tempo_tiro = tempo_tiro - dt
+    end
+
+    -- Atualiza tiros
+    for i = #tiros, 1, -1 do
+        local tiro = tiros[i]
+        tiro.y = tiro.y - tiro.velocidade * dt
+        if tiro.y < 0 then
+            table.remove(tiros, i)
+        end
+    end
+
+    -- Atualiza asteroides
+    for i = #asteroides, 1, -1 do
+        local ast = asteroides[i]
+        ast.y = ast.y + ast.velocidade * dt
+
+        -- Remove asteroides que saem da tela
+        if ast.y > love.graphics.getHeight() then
+            table.remove(asteroides, i)
+        end
+    end
+
+    -- Colisões entre tiros e asteroides
+    for i = #tiros, 1, -1 do
+        for j = #asteroides, 1, -1 do
+            local tiro = tiros[i]
+            local ast = asteroides[j]
+            if tiro.x < ast.x + ast.largura and tiro.x + 5 > ast.x and
+               tiro.y < ast.y + ast.altura and tiro.y + 10 > ast.y then
+                table.remove(tiros, i)
+                table.remove(asteroides, j)
+                pontuacao = pontuacao + 10
+                break
+            end
+        end
+    end
+
+    -- Criar asteroides periodicamente
+    if math.random() < 0.02 then
+        criarAsteroide()
+    end
+end
+
+-- Desenha elementos na tela
+function love.draw()
+    -- Nave
+    love.graphics.setColor(0, 1, 0)
+    love.graphics.rectangle("fill", nave.x, nave.y, nave.largura, nave.altura)
+
+    -- Tiros
+    love.graphics.setColor(1, 0, 0)
+    for _, tiro in ipairs(tiros) do
+        love.graphics.rectangle("fill", tiro.x, tiro.y, 5, 10)
+    end
+
+    -- Asteroides
+    love.graphics.setColor(0.5, 0.5, 0.5)
+    for _, ast in ipairs(asteroides) do
+        love.graphics.rectangle("fill", ast.x, ast.y, ast.largura, ast.altura)
+    end
+
+    -- Pontuação
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print("Pontuação: " .. pontuacao, 10, 10)
+end
+
+-- Detecta entrada de teclado
+function love.keypressed(key)
+    if key == "space" then
+        atirar()
+    end
+end
+
+-- Inicializa o jogo
+function love.load()
+    iniciarNave()
+end
