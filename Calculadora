@@ -1,0 +1,35 @@
+-- Definição da função principal da calculadora
+function calculadora()
+    print("=== Calculadora Profissional em Lua ===")
+    print("Digite 'sair' para encerrar o programa.")
+
+    while true do
+        -- Entrada do usuário
+        io.write("Digite a operação (exemplo: 5 + 3 ou sqrt(16)): ")
+        local entrada = io.read()
+
+        -- Comando para sair do loop
+        if entrada:lower() == "sair" then
+            print("Encerrando a calculadora. Até mais!")
+            break
+        end
+
+        -- Tenta avaliar a expressão com segurança
+        local sucesso, resultado = pcall(function()
+            return assert(load("return " .. entrada, "Calculadora", "t", { 
+                sqrt = math.sqrt, log = math.log, sin = math.sin, cos = math.cos, tan = math.tan,
+                pi = math.pi, e = math.exp(1) 
+            }))()
+        end)
+
+        -- Verifica se houve erro na execução
+        if sucesso then
+            print("Resultado: " .. resultado)
+        else
+            print("Erro: expressão inválida. Tente novamente!")
+        end
+    end
+end
+
+-- Executa a calculadora
+calculadora()
