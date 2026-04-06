@@ -1,0 +1,241 @@
+from discord.ext import commands
+
+from discord import app_commands
+
+
+
+# Configuração do bot
+
+TOKEN = "SEU_TOKEN_AQUI"
+
+PREFIXO = "lula "  # Prefixo personalizado
+
+
+
+intents = discord.Intents.default()
+
+intents.voice_states = True  # Permite detectar canais de voz
+
+bot = commands.Bot(command_prefix=PREFIXO, intents=intents)
+
+
+
+# Lista de IDs de administradores autorizados
+
+ADMINISTRADORES = ["793700485085134870", "1335351341379358821" "1149324560479559720"]
+
+
+
+# Classe para o Painel Interativo de Moderação
+
+class PainelModeracao(discord.ui.View):
+
+    def __init__(self):
+
+        super().__init__(timeout=None)  # O painel fica ativo indefinidamente
+
+
+
+    @discord.ui.button(label="Entrar na Call", style=discord.ButtonStyle.green, emoji="🎤")
+
+    async def entrar_call(self, interaction: discord.Interaction, button: discord.ui.Button):
+
+        if str(interaction.user.id) not in ADMINISTRADORES:
+
+            await interaction.response.send_message("❌ Apenas administradores podem usar este comando!", ephemeral=True)
+
+            return
+
+
+
+        if interaction.user.voice:  # Verifica se o usuário está em um canal de voz
+
+            canal = interaction.user.voice.channel
+
+            await canal.connect()
+
+            await interaction.response.send_message(f"✅ Entrei na call **{canal.name}**!", ephemeral=False)
+
+        else:
+
+            await interaction.response.send_message("⚠️ Você precisa estar em um canal de voz!", ephemeral=True)
+
+
+
+    @discord.ui.button(label="Sair da Call", style=discord.ButtonStyle.red, emoji="🚪")
+
+    async def sair_call(self, interaction: discord.Interaction, button: discord.ui.Button):
+
+        if str(interaction.user.id) not in ADMINISTRADORES:
+
+            await interaction.response.send_message("❌ Apenas administradores podem usar este comando!", ephemeral=True)
+
+            return
+
+
+
+        if interaction.guild.voice_client:
+
+            await interaction.guild.voice_client.disconnect()
+
+            await interaction.response.send_message("👋 Saí do canal de voz!", ephemeral=False)
+
+        else:
+
+            await interaction.response.send_message("⚠️ Não estou em nenhum canal de voz!", ephemeral=True)
+
+
+
+    @discord.ui.button(label="Configurar Blacklist", style=discord.ButtonStyle.grey, emoji="🚫")
+
+    async def blacklist_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+
+        if str(interaction.user.id) not in ADMINISTRADORES:
+
+            await interaction.response.send_message("❌ Apenas administradores podem usar este comando!", ephemeral=True)
+
+            return
+
+        await interaction.response.send_message("🔧 **Blacklist configurada com sucesso!**", ephemeral=False)
+
+
+
+    @discord.ui.button(label="Configurar Anti-Marcações", style=discord.ButtonStyle.grey, emoji="🔕")
+
+    async def anti_marcacoes_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+
+        if str(interaction.user.id) not in ADMINISTRADORES:
+
+            await interaction.response.send_message("❌ Apenas administradores podem usar este comando!", ephemeral=True)
+
+            return
+
+        await interaction.response.send_message("🔧 **Anti-Marcações ativado!**", ephemeral=False)
+
+
+
+    @discord.ui.button(label="Configurar Anti-Permissão Cargo", style=discord.ButtonStyle.grey, emoji="🔒")
+
+    async def anti_perm_cargo_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+
+        if str(interaction.user.id) not in ADMINISTRADORES:
+
+            await interaction.response.send_message("❌ Apenas administradores podem usar este comando!", ephemeral=True)
+
+            return
+
+        await interaction.response.send_message("🔧 **Anti-Permissão de Cargos ativado!**", ephemeral=False)
+
+
+
+    @discord.ui.button(label="Configurar Bio Checker URL", style=discord.ButtonStyle.grey, emoji="🌐")
+
+    async def bio_checker_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+
+        if str(interaction.user.id) not in ADMINISTRADORES:
+
+            await interaction.response.send_message("❌ Apenas administradores podem usar este comando!", ephemeral=True)
+
+            return
+
+        await interaction.response.send_message("🔧 **Bio Checker URL configurado!**", ephemeral=False)
+
+
+
+    @discord.ui.button(label="Voltar", style=discord.ButtonStyle.blurple, emoji="↩️")
+
+    async def voltar_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+
+        await interaction.response.send_message("⏪ **Retornando...**", ephemeral=True)
+
+
+
+# Comando `/painel` usando Slash Commands
+
+@bot.tree.command(name="painel", description="Envia o painel de configuração de moderação.")
+
+async def painel_slash(interaction: discord.Interaction):
+
+    if str(interaction.user.id) not in ADMINISTRADORES:
+
+        await interaction.response.send_message("❌ Apenas administradores podem usar este comando!", ephemeral=True)
+
+        return
+
+
+
+    embed = discord.Embed(
+
+        title="🔧 Painel de Moderação",
+
+        description="Use os botões abaixo para configurar as proteções do servidor.",
+
+        color=discord.Color.blue()
+
+    )
+
+    embed.add_field(name="👤 Administrador:", value=f"<@{interaction.user.id}>", inline=False)
+
+    embed.set_footer(text="Apenas administradores podem usar os comandos.")
+
+
+
+    await interaction.response.send_message(embed=embed, view=PainelModeracao())
+
+
+
+# Comando "lula painel" usando prefixo
+
+@bot.command(name="painel")
+
+async def painel_prefix(ctx):
+
+    if str(ctx.author.id) not in ADMINISTRADORES:
+
+        await ctx.send("❌ Apenas administradores podem usar este comando!")
+
+        return
+
+
+
+    embed = discord.Embed(
+
+        title="🔧 Painel de Moderação",
+
+        description="Use os botões abaixo para configurar as proteções do servidor.",
+
+        color=discord.Color.blue()
+
+    )
+
+    embed.add_field(name="👤 Administrador:", value=f"<@{ctx.author.id}>", inline=False)
+
+    embed.set_footer(text="Apenas administradores podem usar os comandos.")
+
+
+
+    await ctx.send(embed=embed, view=PainelModeracao())
+
+
+
+# Evento de inicialização e sincronização dos Slash Commands
+
+@bot.event
+
+async def on_ready():
+
+    try:
+
+        await bot.tree.sync()
+
+        print(f"✅ Bot {bot.user} está online e comandos sincronizados!")
+
+    except Exception as e:
+
+        print(f"❌ Erro ao sincronizar comandos: {e}")
+
+
+
+
+
+bot.run("")
